@@ -1,0 +1,54 @@
+[SerializeField] GameObject projectile;
+    [SerializeField] GameObject gun;
+    spawmScript myLaneSpawner;
+
+    void Start()
+    {
+        SetLaneSpawner();
+    }
+
+    void Update()
+    {
+        if(IsAttackerInLane())
+        {
+            Debug.Log("shoot pew pew");
+        }
+
+        else
+        {
+            Debug.Log("sit and wait");
+        }
+    }
+
+    private void SetLaneSpawner()
+    {
+        spawmScript[] spawners = FindObjectsOfType<spawmScript>();
+
+        foreach (spawmScript spawner in spawners)
+        {
+            bool IsCloseEnougn = (Mathf.Abs(spawner.transform.position.y - transform.position.y) <= Mathf.Epsilon);
+
+            if(IsCloseEnougn)
+            {
+                myLaneSpawner = spawner;
+            }
+        }
+    }
+
+    private bool IsAttackerInLane()
+    {
+        if(myLaneSpawner.transform.childCount <= 0)
+        {
+            return false;
+        }
+
+        else
+        {
+            return true;
+        }
+    }
+
+    public void Fire(float damage)
+    {
+        Instantiate(projectile, gun.transform.position, gun.transform.rotation);
+    }
